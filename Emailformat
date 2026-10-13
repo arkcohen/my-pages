@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail Style Email Builder Dashboard</title>
+    <!-- Tailwind CSS for rich interface structures -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f6f8fc;
+        }
+        /* Custom scrollbar for Gmail aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e0e0e0;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c0c0c0;
+        }
+        /* ContentEditable Placeholder */
+        [contenteditable]:empty:before {
+            content: attr(data-placeholder);
+            color: #aaaaaa;
+            font-style: normal;
+        }
+        /* Mobile Device Frame styling */
+        .phone-container {
+            width: 360px;
+            height: 740px;
+            border: 12px solid #1e293b;
+            border-radius: 36px;
+            position: relative;
+            background-color: #ffffff;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+        .phone-speaker {
+            width: 60px;
+            height: 4px;
+            background-color: #1e293b;
+            border-radius: 2px;
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+        }
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            background-color: #ffffff;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col text-gray-800 overflow-hidden">
+
+    <!-- TOP HEADER -->
+    <header class="bg-white h-16 border-b border-gray-200 flex items-center justify-between px-4 shrink-0">
+        <div class="flex items-center space-x-4">
+            <button class="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <div class="flex items-center space-x-2">
+                <!-- Gmail Icon Silhouette -->
+                <svg class="w-8 h-8 text-red-500" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+                <span class="text-xl font-medium text-gray-700 tracking-tight">MailForge</span>
+                <span class="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full font-semibold">Dashboard</span>
+            </div>
+        </div>
+        
+        <div class="flex-1 max-w-2xl mx-8 hidden md:block">
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </span>
+                <input type="text" placeholder="Search templates and workflows" class="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent rounded-full focus:bg-white focus:border-gray-300 focus:outline-none transition text-sm">
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-2">
+            <div class="w-9 h-9 bg-blue-600 text-white font-bold rounded-full flex items-center justify-center text-sm shadow">
+                AI
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN BODY CORE -->
+    <div class="flex-1 flex overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-64 bg-white border-r border-gray-200 hidden lg:flex flex-col p-3 shrink-0">
+            <button class="flex items-center space-x-3 px-6 py-4 bg-blue-100 text-blue-800 font-medium rounded-2xl hover:shadow-md transition duration-200 mb-6 group w-full">
+                <svg class="w-5 h-5 text-blue-700 group-hover:rotate-90 transition duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>Email Studio</span>
+            </button>
+            <nav class="space-y-1 flex-1">
+                <a href="#" class="flex items-center justify-between px-4 py-2.5 bg-blue-50 text-blue-700 font-medium rounded-full text-sm">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        <span>Composer Studio</span>
+                    </div>
+                    <span class="text-xs font-semibold bg-blue-200 px-2 py-0.5 rounded-full">Active</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-100 rounded-full text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.381-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                    <span>Saved Templates</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-100 rounded-full text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>Campaign Analytics</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-100 rounded-full text-sm transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+                    <span>Config Settings</span>
+                </a>
+            </nav>
+            <div class="pt-4 border-t border-gray-100 text-xs text-gray-400 text-center">
+                Built for Custom CRM Integrations
+            </div>
+        </aside>
+
+        <!-- WORKSPACE OVERVIEW (SCROLLABLE CONTAINER WITH BOTH SECTIONS STACKED VERTICALLY) -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-8 bg-[#f6f8fc]">
+            
+            <!-- SECTION 1: DESKTOP GMAIL CREATOR WINDOW -->
+            <section class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden max-w-4xl mx-auto">
+                <div class="bg-gray-900 px-4 py-3 flex items-center justify-between text-white">
+                    <div class="flex items-center space-x-2 text-sm font-medium">
+                        <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                        <span>Workspace Live Email Architect</span>
+                    </div>
+                    <div class="flex space-x-2 text-gray-400">
+                        <div class="w-3 h-3 rounded-full bg-gray-700"></div>
+                        <div class="w-3 h-3 rounded-full bg-gray-700"></div>
+                    </div>
+                </div>
+
+                <!-- EMAIL FIELDS -->
+                <div class="p-4 border-b border-gray-100 space-y-3">
+                    <div class="flex items-center border-b border-gray-100 pb-2 text-sm">
+                        <span class="w-16 text-gray-500 font-medium">To:</span>
+                        <input id="email-to" type="text" value="" class="flex-1 focus:outline-none text-gray-700 font-normal" placeholder="Add recipients...">
+                    </div>
+                    <div class="flex items-center border-b border-gray-100 pb-2 text-sm">
+                        <span class="w-16 text-gray-500 font-medium">Subject:</span>
+                        <input id="email-subject" type="text" value="" class="flex-1 focus:outline-none text-gray-800 font-medium" placeholder="Add subject line...">
+                    </div>
+                </div>
+
+                <!-- RICH TEXT TOOLBAR -->
+                <div class="bg-gray-50 border-b border-gray-200 px-4 py-2 flex flex-wrap items-center gap-1.5">
+                    <!-- Standard formatting commands -->
+                    <button onclick="formatDoc('bold')" title="Bold" class="p-1.5 hover:bg-gray-200 rounded text-gray-700 font-bold transition text-xs px-2.5 border border-gray-200 bg-white">B</button>
+                    <button onclick="formatDoc('italic')" title="Icut" class="p-1.5 hover:bg-gray-200 rounded text-gray-700 italic transition text-xs px-2.5 border border-gray-200 bg-white">I</button>
+                    <button onclick="formatDoc('underline')" title="Underline" class="p-1.5 hover:bg-gray-200 rounded text-gray-700 underline transition text-xs px-2.5 border border-gray-200 bg-white">U</button>
+                    
+                    <div class="h-6 w-px bg-gray-300 mx-1"></div>
+
+                    <!-- FONT COLOR CONTROLS -->
+                    <div class="relative inline-block">
+                        <button onclick="toggleDropdown('color-picker-dropdown')" title="Font Color" class="p-1.5 hover:bg-gray-200 rounded text-gray-700 transition text-xs flex items-center space-x-1 border border-gray-200 bg-white">
+                            <span class="font-bold border-b-2 border-red-500">A</span>
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <!-- Color Dropdown Matrix -->
+                        <div id="color-picker-dropdown" class="hidden absolute top-full left-0 mt-1 bg-white border border-gray-200 shadow-xl rounded-lg p-2 grid grid-cols-5 gap-1.5 z-50 w-40">
+                            <button onclick="setFontColor('#000000')" class="w-6 h-6 rounded bg-black" title="Black"></button>
+                            <button onclick="setFontColor('#ef4444')" class="w-6 h-6 rounded bg-red-500" title="Red"></button>
+                            <button onclick="setFontColor('#3b82f6')" class="w-6 h-6 rounded bg-blue-500" title="Blue"></button>
+                            <button onclick="setFontColor('#10b981')" class="w-6 h-6 rounded bg-emerald-500" title="Green"></button>
+                            <button onclick="setFontColor('#f59e0b')" class="w-6 h-6 rounded bg-amber-500" title="Orange"></button>
+                            <button onclick="setFontColor('#8b5cf6')" class="w-6 h-6 rounded bg-purple-500" title="Purple"></button>
+                            <button onclick="setFontColor('#ec4899')" class="w-6 h-6 rounded bg-pink-500" title="Pink"></button>
+                            <button onclick="setFontColor('#6b7280')" class="w-6 h-6 rounded bg-gray-500" title="Gray"></button>
+                            <button onclick="setFontColor('#2563eb')" class="w-6 h-6 rounded bg-blue-700" title="Dark Blue"></button>
+                            <button onclick="setFontColor('#b45309')" class="w-6 h-6 rounded bg-amber-700" title="Brown"></button>
+                        </div>
+                    </div>
+
+                    <div class="h-6 w-px bg-gray-300 mx-1"></div>
+
+                    <!-- HYPERLINK WIDGET -->
+                    <button onclick="openHyperlinkModal()" title="Insert Link" class="p-1.5 bg-white border border-gray-200 hover:bg-blue-50 text-blue-600 rounded flex items-center space-x-1 text-xs font-medium transition">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                        <span>Add Link</span>
+                    </button>
+
+                    <!-- CUSTOM CALL-TO-ACTION BUTTON GENERATOR -->
+                    <button onclick="openButtonModal()" title="Create CTA Button" class="p-1.5 bg-blue-600 text-white hover:bg-blue-700 rounded flex items-center space-x-1 text-xs font-semibold shadow-sm transition">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+                        <span>Insert "Click Here" Button</span>
+                    </button>
+                </div>
+
+                <!-- CONTENTEDITABLE MAIN WORKSPACE WITH INTEGRATED YELP SIGNATURE -->
+                <div id="email-editor" contenteditable="true" data-placeholder="Start drafting your immersive template content here..." class="p-6 min-h-[280px] focus:outline-none text-base text-gray-800 leading-relaxed overflow-y-auto">
+                    <!-- Blank workspace line for composing -->
+                    <p><br></p>
+                    
+                    <!-- REPLICATED SIGNATURE FRAME -->
+                    <div class="signature-container mt-12 select-none pointer-events-none" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align: left; line-height: 1.4;">
+                        <p style="color: #000000; font-size: 14px; margin: 0 0 12px 0;">--</p>
+                        
+                        <div style="margin-bottom: 8px;">
+                            <span style="font-weight: 700; color: #2b2b2b; font-size: 15px; letter-spacing: -0.2px;">Jared Cohen, Yelp Inc.</span>
+                            <!-- Yelp Red Style Asterisk Spark Silhouette -->
+                            <span style="color: #d32323; font-size: 16px; font-weight: bold; margin-left: 2px; vertical-align: middle;">*</span>
+                        </div>
+                        
+                        <div style="font-weight: 700; color: #000000; font-size: 14px; margin-bottom: 12px;">
+                            Senior Elite Account Executive
+                        </div>
+                        
+                        <div style="font-size: 11px; margin-bottom: 10px;">
+                            <a href="tel:+13126374352" style="color: #d32323; text-decoration: underline; font-weight: 500;">+13126374352</a>
+                            <span style="color: #999999; margin: 0 4px;">|</span>
+                            <a href="https://yelp.com" style="color: #d32323; text-decoration: underline; font-weight: 500;">Yelp For Business Owners</a>
+                            <span style="color: #999999; margin: 0 4px;">|</span>
+                            <a href="https://yelp-success.com" style="color: #d32323; text-decoration: underline; font-weight: 500;">Success Stories</a>
+                        </div>
+                        
+                        <div style="font-size: 8.5px; color: #737373; line-height: 1.3; max-width: 580px;">
+                            Please note: phone calls with Yelp may be monitored and recorded for quality purposes.<br>
+                            Yelp Inc., 140 New Montgomery Street, San Francisco, CA 94105, U.S.A.<br>
+                            <a href="#" style="color: #737373; text-decoration: underline;">Click here</a> to unsubscribe.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DESKTOP FOOTER ACTION BAR -->
+                <div class="bg-gray-50 border-t border-gray-100 px-4 py-3 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2 rounded-full shadow-sm transition">Send Campaign</button>
+                        <button class="p-2 text-gray-500 hover:bg-gray-200 rounded-full transition" title="Attach files">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+                        </button>
+                    </div>
+                    <span class="text-xs text-gray-400 italic">Changes are saved automatically to cloud template workspace</span>
+                </div>
+            </section>
+
+            <!-- SECTION 2: MOBILE PREVIEW SYSTEM FRAME -->
+            <section class="flex flex-col items-center justify-center">
+                <div class="text-center mb-4">
+                    <h3 class="text-lg font-bold text-gray-700 flex items-center justify-center space-x-2">
+                        <span>📱 Live Smartphone Frame Synchronizer</span>
+                    </h3>
+                    <p class="text-xs text-gray-500">Real-time content scaling rendering checks for mobile responsive optimization</p>
+                </div>
+
+                <!-- PHONE CONTAINER HARDWARE MOCKUP -->
+                <div class="phone-container">
+                    <div class="phone-speaker"></div>
+                    
+                    <div class="phone-screen flex flex-col">
+                        <!-- Mobile Status Bar Shell -->
+                        <div class="px-5 py-1 bg-white flex justify-between items-center text-[10px] font-bold text-gray-600 select-none shrink-0 border-b border-gray-50">
+                            <div>08:17 AM</div>
+                            <div class="flex items-center space-x-1">
+                                <span>5G</span>
+                                <span class="w-3.5 h-2 bg-gray-600 rounded-xs inline-block"></span>
+                            </div>
+                        </div>
+
+                        <!-- Mobile App Mail Navigation Header -->
+                        <div class="p-3 bg-white border-b border-gray-100 flex items-center space-x-3 shrink-0 shadow-xs">
+                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                            <div class="flex-1">
+                                <h4 class="text-xs font-bold text-gray-900 truncate" id="mobile-preview-subject">(No Subject)</h4>
+                                <p class="text-[10px] text-gray-500 truncate">Inboxes &raquo; Primary Workspace</p>
+                            </div>
+                            <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-[10px] text-blue-700 font-bold">In</div>
+                        </div>
+
+                        <!-- Mobile Sender Matrix Header -->
+                        <div class="p-3 bg-white flex items-start space-x-2 shrink-0 border-b border-gray-50">
+                            <div class="w-8 h-8 rounded-full bg-red-500 text-white font-bold flex items-center justify-center text-xs shadow-sm">
+                                M
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold text-gray-900 truncate">MailForge Engine</span>
+                                    <span class="text-[9px] text-gray-400">Just Now</span>
+                                </div>
+                                <p class="text-[10px] text-gray-500 truncate">to <span id="mobile-preview-to">recipient</span></p>
+                            </div>
+                        </div>
+
+                        <!-- MOBILE MAIL ENGINE SCALED CONTAINER -->
+                        <div class="flex-1 p-4 overflow-y-auto bg-white text-sm" id="mobile-preview-body">
+                            <!-- Injected innerHTML mirrors dynamic desktop workspace layout changes -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- MODAL POPUPS: HYPERLINK COMPOSER MODAL -->
+    <div id="hyperlink-modal" class="hidden fixed inset-0 bg-black/50 items-center justify-center p-4 z-50 backdrop-blur-xs">
+        <div class="bg-white rounded-xl shadow-2xl p-5 w-full max-w-sm border border-gray-100">
+            <h3 class="text-sm font-bold text-gray-900 mb-3 flex items-center space-x-1.5">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                <span>Embed Standard Hyperlink</span>
+            </h3>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Display Text</label>
+                    <input id="link-text" type="text" value="Explore Portal Link" class="w-full text-xs p-2 border border-gray-200 rounded focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Destination Target URL</label>
+                    <input id="link-url" type="text" value="https://google.com" class="w-full text-xs p-2 border border-gray-200 rounded focus:outline-none focus:border-blue-500">
+                </div>
+            </div>
+            <div class="mt-4 flex justify-end space-x-2">
+                <button onclick="closeHyperlinkModal()" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded transition">Cancel</button>
+                <button onclick="insertHyperlink()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded shadow-xs transition">Apply Link</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL POPUPS: CALL-TO-ACTION BUTTON COMPOSER MODAL -->
+    <div id="button-modal" class="hidden fixed inset-0 bg-black/50 items-center justify-center p-4 z-50 backdrop-blur-xs">
+        <div class="bg-white rounded-xl shadow-2xl p-5 w-full max-w-sm border border-gray-100">
+            <h3 class="text-sm font-bold text-gray-900 mb-3 flex items-center space-x-1.5">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+                <span>Generate "Click Here" Action Button</span>
+            </h3>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Button Callout Text</label>
+                    <input id="btn-text" type="text" value="Click Here To Claim Reward ⚡" class="w-full text-xs p-2 border border-gray-200 rounded focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Destination Target URL</label>
+                    <input id="btn-url" type="text" value="https://google.com" class="w-full text-xs p-2 border border-gray-200 rounded focus:outline-none focus:border-emerald-500">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">Background Color</label>
+                        <select id="btn-bg-color" class="w-full text-xs p-2 border border-gray-200 rounded focus:outline-none bg-white">
+                            <option value="#1a73e8">Google Blue</option>
+                            <option value="#dc2626">Crimson Red</option>
+                            <option value="#16a34a">Emerald Green</option>
+                            <option value="#9333ea">Royal Purple</option>
+                            <option value="#ea580c">Vibrant Orange</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">Text Color</label>
+                        <select id="btn-text-color" class="w-full text-xs p-2 border border-gray-200 rounded focus:outline-none bg-white">
+                            <option value="#ffffff">White</option>
+                            <option value="#fef08a">Light Yellow</option>
+                            <option value="#000000">Deep Black</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 flex justify-end space-x-2">
+                <button onclick="closeButtonModal()" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded transition">Cancel</button>
+                <button onclick="insertCtaButton()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded shadow-xs transition">Inject Button</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE LOGIC / SYNCHRONIZER ENGINE -->
+    <script>
+        // DOM Elements References
+        const emailEditor = document.getElementById('email-editor');
+        const emailSubject = document.getElementById('email-subject');
+        const emailTo = document.getElementById('email-to');
+
+        const mobilePreviewBody = document.getElementById('mobile-preview-body');
+        const mobilePreviewSubject = document.getElementById('mobile-preview-subject');
+        const mobilePreviewTo = document.getElementById('mobile-preview-to');
+
+        // Retained text selection range storage
+        let savedRange = null;
+
+        // Synchronize Desktop Workspace parameters directly to Mobile Display Bezel Mockup
+        function syncMobileDisplay() {
+            mobilePreviewBody.innerHTML = emailEditor.innerHTML;
+            mobilePreviewSubject.textContent = emailSubject.value || '(No Subject)';
+            mobilePreviewTo.textContent = emailTo.value || 'recipient@domain.com';
+        }
+
+        // Initialize Workspace Event Hooks
+        emailEditor.addEventListener('input', syncMobileDisplay);
+        emailEditor.addEventListener('keyup', syncMobileDisplay);
+        emailSubject.addEventListener('input', syncMobileDisplay);
+        emailTo.addEventListener('input', syncMobileDisplay);
+
+        // Core Text Formatting Commands wrappers
+        function formatDoc(command, value = null) {
+            document.execCommand(command, false, value);
+            emailEditor.focus();
+            syncMobileDisplay();
+        }
+
+        // Dropdown toggle system
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                // Close all other dropdown templates first
+                document.getElementById('color-picker-dropdown').classList.add('hidden');
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Font text target coloring trigger
+        function setFontColor(color) {
+            formatDoc('foreColor', color);
+            document.getElementById('color-picker-dropdown').classList.add('hidden');
+        }
+
+        // Track focus text selection positioning parameters
+        function saveCurrentSelection() {
+            const sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                savedRange = sel.getRangeAt(0);
+            }
+        }
+
+        // Restore active focus boundaries
+        function restoreSelection() {
+            if (savedRange) {
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(savedRange);
+            }
+        }
+
+        // Hyperlink Popup Dialog system Controller
+        function openHyperlinkModal() {
+            saveCurrentSelection();
+            document.getElementById('hyperlink-modal').classList.remove('hidden');
+            document.getElementById('hyperlink-modal').classList.add('flex');
+        }
+
+        function closeHyperlinkModal() {
+            document.getElementById('hyperlink-modal').classList.add('hidden');
+            document.getElementById('hyperlink-modal').classList.remove('flex');
+        }
+
+        function insertHyperlink() {
+            const displayTxt = document.getElementById('link-text').value;
+            const targetUrl = document.getElementById('link-url').value;
+
+            closeHyperlinkModal();
+            emailEditor.focus();
+            restoreSelection();
+
+            // Inject custom configured text hyperlink anchor string element node block
+            if (targetUrl) {
+                const anchorHtml = `<a href="${targetUrl}" target="_blank" style="color: #1a73e8; text-decoration: underline; font-weight: 500;">${displayTxt || targetUrl}</a>`;
+                document.execCommand('insertHTML', false, anchorHtml);
+            }
+            syncMobileDisplay();
+        }
+
+        // Custom Styled Button Popup System Controller
+        function openButtonModal() {
+            saveCurrentSelection();
+            document.getElementById('button-modal').classList.remove('hidden');
+            document.getElementById('button-modal').classList.add('flex');
+        }
+
+        function closeButtonModal() {
+            document.getElementById('button-modal').classList.add('hidden');
+            document.getElementById('button-modal').classList.remove('flex');
+        }
+
+        // Inject Callout Button components
+        function insertCtaButton() {
+            const btnText = document.getElementById('btn-text').value;
+            const btnUrl = document.getElementById('btn-url').value;
+            const bgHex = document.getElementById('btn-bg-color').value;
+            const textHex = document.getElementById('btn-text-color').value;
+
+            closeButtonModal();
+            emailEditor.focus();
+            restoreSelection();
+
+            if (btnUrl) {
+                // Generate a fully valid rich-inline anchor element configured into CSS block layouts
+                const dynamicBtnHtml = `
+                    <div style="text-align: center; margin: 16px 0;" contenteditable="false">
+                        <a href="${btnUrl}" target="_blank" style="display: inline-block; padding: 12px 24px; background-color: ${bgHex}; color: ${textHex}; text-decoration: none; border-radius: 8px; font-weight: bold; font-family: 'Roboto', sans-serif; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); transition: transform 0.2s;">
+                            ${btnText}
+                        </a>
+                    </div>
+                    <p><br></p>
+                `;
+                document.execCommand('insertHTML', false, dynamicBtnHtml);
+            }
+            syncMobileDisplay();
+        }
+
+        // Close dropdown triggers on document level clicks outside containers
+        document.addEventListener('click', function(e) {
+            const colorPickerContainer = document.getElementById('color-picker-dropdown');
+            if (!e.target.closest('[title="Font Color"]') && !e.target.closest('#color-picker-dropdown')) {
+                colorPickerContainer.classList.add('hidden');
+            }
+        });
+
+        // Trigger bootstrap configuration layer render
+        window.onload = function() {
+            syncMobileDisplay();
+        };
+    </script>
+</body>
+</html>
